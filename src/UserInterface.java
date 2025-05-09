@@ -56,12 +56,12 @@ public class UserInterface {
             name = name.substring(0, 32) + "...";
         }
 
-        System.out.println("\n" + CYAN + "╔════════════════════════════════════════════════════════════╗");
+        System.out.println("\n" + CYAN + "╔═════════════════════════════════╗");
         System.out.printf (" %s%-58s%s \n", "", "🚗 Welcome to " + BOLD + name + RESET + CYAN, "");
-        System.out.println("╠════════════════════════════════════════════════════════════╣" + RESET);
+        System.out.println("╠═════════════════════════════════╣" + RESET);
         System.out.printf ("  📍 Address: %s\n", address);
         System.out.printf ("  ☎️  Phone:   %s\n", phone);
-        System.out.println(CYAN + "╚════════════════════════════════════════════════════════════╝" + RESET);
+        System.out.println(CYAN + "╚═════════════════════════════════╝" + RESET);
 
         System.out.println("\n" + BOLD + "--- 🛠️ Dealership Menu ---" + RESET);
         System.out.println(YELLOW +
