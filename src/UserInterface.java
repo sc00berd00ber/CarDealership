@@ -34,31 +34,72 @@ public class UserInterface {
             }
         }
     }
+
     private void init() {
         DealershipFileManager dfm = new DealershipFileManager();
         dealership = dfm.getDealership();
     }
     //MAIN MENU
-    public void displayMenu(){
-        System.out.println("\n===============================");
-        System.out.println("  Welcome to " + dealership.getName());
-        System.out.println("  Address: " );
-        System.out.println("  Phone:   ");
-        System.out.println("===============================\n");
-        System.out.println("\n--- Dealership Menu ---");
-        System.out.println(
-                "1 - Find vehicles within a price range\n" +
-                "2 - Find vehicles by make / model\n" +
-                "3 - Find vehicles by year range\n" +
-                "4 - Find vehicles by color\n" +
-                "5 - Find vehicles by mileage range\n" +
-                "6 - Find vehicles by type (car, truck, SUV, van)\n" +
-                "7 - List ALL vehicles\n" +
-                "8 - Add a vehicle\n" +
-                "9 - Remove a vehicle\n" +
-                "99 - Quit\n" +
-                "Enter your choice: ");
+    public void displayMenu() {
+        final String RESET = "\033[0m";
+        final String BOLD = "\033[1m";
+        final String CYAN = "\033[36m";
+        final String YELLOW = "\033[33m";
+        final String GREEN = "\033[32m";
+
+        String name = dealership.getName();
+        String address = dealership.getAddress();
+        String phone = dealership.getPhoneNumber();
+
+        // Limit dealership name to 35 characters for box formatting
+        if (name.length() > 35) {
+            name = name.substring(0, 32) + "...";
+        }
+
+        System.out.println("\n" + CYAN + "╔════════════════════════════════════════════════════════════╗");
+        System.out.printf (" %s%-58s%s \n", "", "🚗 Welcome to " + BOLD + name + RESET + CYAN, "");
+        System.out.println("╠════════════════════════════════════════════════════════════╣" + RESET);
+        System.out.printf ("  📍 Address: %s\n", address);
+        System.out.printf ("  ☎️  Phone:   %s\n", phone);
+        System.out.println(CYAN + "╚════════════════════════════════════════════════════════════╝" + RESET);
+
+        System.out.println("\n" + BOLD + "--- 🛠️ Dealership Menu ---" + RESET);
+        System.out.println(YELLOW +
+                "1️⃣  - Find vehicles within a price range 💰\n" +
+                "2️⃣  - Find vehicles by make / model 🚘\n" +
+                "3️⃣  - Find vehicles by year range 📆\n" +
+                "4️⃣  - Find vehicles by color 🎨\n" +
+                "5️⃣  - Find vehicles by mileage range 🛣️\n" +
+                "6️⃣  - Find vehicles by type (car, truck, SUV, van) 🚙\n" +
+                "7️⃣  - List ALL vehicles 📋\n" +
+                "8️⃣  - Add a vehicle ➕\n" +
+                "9️⃣  - Remove a vehicle ❌\n" +
+                "💥 99 - Quit 👋" + RESET);
+        System.out.print(GREEN + "\n👉 Enter your choice: " + RESET);
     }
+
+
+//    public void displayMenu(){
+//
+//        System.out.println("\n===============================");
+//        System.out.println("  Welcome to " + dealership.getName());
+//        System.out.println("  Address: " + dealership.getAddress());
+//        System.out.println("  Phone:   " + dealership.getPhoneNumber());
+//        System.out.println("===============================\n");
+//        System.out.println("\n--- Dealership Menu ---");
+//        System.out.println(
+//                "1 - Find vehicles within a price range\n" +
+//                "2 - Find vehicles by make / model\n" +
+//                "3 - Find vehicles by year range\n" +
+//                "4 - Find vehicles by color\n" +
+//                "5 - Find vehicles by mileage range\n" +
+//                "6 - Find vehicles by type (car, truck, SUV, van)\n" +
+//                "7 - List ALL vehicles\n" +
+//                "8 - Add a vehicle\n" +
+//                "9 - Remove a vehicle\n" +
+//                "99 - Quit\n" +
+//                "Enter your choice: ");
+//    }
 
     //DISPLAY FORMATTING
     private void displayVehicles(List<Vehicle> vehicles) {
