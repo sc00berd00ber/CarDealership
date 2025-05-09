@@ -1,9 +1,9 @@
 import java.util.ArrayList;
 
 public class Dealership {
-    String name;
-    String address;
-    String phoneNumber;
+    private final String name;
+    private final String address;
+    private final String phoneNumber;
 
     //CONSTRUCTOR
     public Dealership(String name,
