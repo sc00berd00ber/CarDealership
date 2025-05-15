@@ -6,7 +6,7 @@ public class UserInterface {
     private Scanner scanner = new Scanner(System.in);
 
 
-    public void displayLogic(){
+    public void display(){
         init();
         boolean running = true;
         while(running){
@@ -77,7 +77,6 @@ public class UserInterface {
                 "💥 99 - Quit 👋" + RESET);
         System.out.print(GREEN + "\n👉 Enter your choice: " + RESET);
     }
-
 
 //    public void displayMenu(){
 //
