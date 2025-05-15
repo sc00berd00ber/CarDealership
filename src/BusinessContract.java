@@ -9,13 +9,12 @@ import java.util.Date;
     private double monthlyPayment;
 
     BusinessContract(Date date, String customerName, String customerEmail,
-                     boolean isSold, double totalPrice, double monthlyPayment) {
+                     boolean isSold, double totalPrice) {
         this.date = date;
         this.customerName = customerName;
         this.customerEmail = customerEmail;
         this.isSold = isSold;
         this.totalPrice = totalPrice;
-        this.monthlyPayment = monthlyPayment;
     }
 
      @Override
