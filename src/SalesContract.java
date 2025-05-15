@@ -7,6 +7,7 @@ public class SalesContract extends BusinessContract {
     private boolean isFinanced = true;
 
     SalesContract(Date date,
+                  Vehicle vehicle,
                   String customerName,
                   String customerEmail,
                   boolean isSold,
@@ -16,7 +17,7 @@ public class SalesContract extends BusinessContract {
                   double recordingFee,
                   double processingFee,
                   boolean isFinanced){
-        super(date, customerName, customerEmail, isSold, totalPrice);
+        super(date, vehicle, customerName, customerEmail, isSold, totalPrice);
         this.salesTax = salesTax;
         this.recordingFee = recordingFee;
         this.processingFee =  processingFee;

@@ -1,16 +1,21 @@
 import java.util.Date;
 
- abstract class BusinessContract {
+ public abstract class BusinessContract {
     private Date date;
     private String customerName;
     private String customerEmail;
     private boolean isSold;
     private double totalPrice;
     private double monthlyPayment;
+    Vehicle vehicle;
 
-    BusinessContract(Date date, String customerName, String customerEmail,
-                     boolean isSold, double totalPrice) {
+    BusinessContract(Date date, Vehicle vehicle,
+                     String customerName,
+                     String customerEmail,
+                     boolean isSold,
+                     double totalPrice) {
         this.date = date;
+        this.vehicle = vehicle;
         this.customerName = customerName;
         this.customerEmail = customerEmail;
         this.isSold = isSold;
