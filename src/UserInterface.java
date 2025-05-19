@@ -1,45 +1,37 @@
-import java.util.List;
-import java.util.Scanner;
 
-public class UserInterface {
-    private Dealership dealership;
-    private Scanner scanner = new Scanner(System.in);
+import java.util.*;
 
+    public class UserInterface {
+        private Dealership dealership;
+        private Scanner scanner = new Scanner(System.in);
 
-    public void displayLogic(){
-        init();
-        boolean running = true;
-        while(running){
-            displayMenu();
-            String choice = scanner.nextLine();
-            switch (choice){
-                case "1": displayVehicles(dealership.findByPrice(promptDouble("Min price"), promptDouble("Max price"))); break;
-                case "2": displayVehicles(dealership.findByMakeAndModel(prompt("Make"), prompt("Model"))); break;
-                case "3": displayVehicles(dealership.findByYearRange(promptInt("Min year"), promptInt("Max year"))); break;
-                case "4": displayVehicles(dealership.findByColor(prompt("Color"))); break;
-                case "5": displayVehicles(dealership.findByMileageRange(promptInt("Min mileage"), promptInt("Max mileage"))); break;
-                case "6": displayVehicles(dealership.findByVehicleType(prompt("Type"))); break;
-                case "7": displayVehicles(dealership.listAllVehicles()); break;
-                case "8":
-                    if (authenticateEmployee()) addVehicle();
-                    break;
-                case "9":
-                    if (authenticateEmployee()) removeVehicle();
-                    break;
-                case "99":
-                    new DealershipFileManager().saveDealership(dealership);
-                    running = false;
-                    break;
-                default: System.out.println("Invalid choice.");
+        public void display() {
+            dealership = new DealershipFileManager().getDealership();
+            boolean running = true;
+
+            while (running) {
+                displayMenu();
+                String choice = scanner.nextLine();
+
+                switch (choice) {
+                    case "1": searchByPrice(); break;
+                    case "2": searchByMakeModel(); break;
+                    case "3": searchByYear(); break;
+                    case "4": searchByColor(); break;
+                    case "5": searchByMileage(); break;
+                    case "6": searchByType(); break;
+                    case "7": showAllVehicles(); break;
+                    case "8": if (authenticateEmployee()) addVehicle(); break;
+                    case "9": if (authenticateEmployee()) removeVehicle(); break;
+                    case "10": if (authenticateEmployee()) sellOrLeaseVehicle(); break;
+                    case "11": if (authenticateEmployee()) showAllContracts(); break;
+                    case "99": new DealershipFileManager().saveDealership(dealership); running = false; break;
+                    default: System.out.println("Invalid option.");
+                }
             }
         }
-    }
 
-    private void init() {
-        DealershipFileManager dfm = new DealershipFileManager();
-        dealership = dfm.getDealership();
-    }
-    //MAIN MENU
+        //MAIN MENU
     public void displayMenu() {
         final String RESET = "\033[0m";
         final String BOLD = "\033[1m";
@@ -49,7 +41,7 @@ public class UserInterface {
 
         String name = dealership.getName();
         String address = dealership.getAddress();
-        String phone = dealership.getPhoneNumber();
+        String phone = dealership.getPhone();
 
         // Limit dealership name to 35 characters for box formatting
         if (name.length() > 35) {
@@ -74,93 +66,141 @@ public class UserInterface {
                 "7️⃣  - List ALL vehicles 📋\n" +
                 "8️⃣  - Add a vehicle ➕\n" +
                 "9️⃣  - Remove a vehicle ❌\n" +
+                "🔟  - Sell / Lease vehicle 📄\n" +
+                "1️⃣1️⃣  - View all contracts ⬜\n" +
                 "💥 99 - Quit 👋" + RESET);
         System.out.print(GREEN + "\n👉 Enter your choice: " + RESET);
     }
 
-
-//    public void displayMenu(){
-//
-//        System.out.println("\n===============================");
-//        System.out.println("  Welcome to " + dealership.getName());
-//        System.out.println("  Address: " + dealership.getAddress());
-//        System.out.println("  Phone:   " + dealership.getPhoneNumber());
-//        System.out.println("===============================\n");
-//        System.out.println("\n--- Dealership Menu ---");
-//        System.out.println(
-//                "1 - Find vehicles within a price range\n" +
-//                "2 - Find vehicles by make / model\n" +
-//                "3 - Find vehicles by year range\n" +
-//                "4 - Find vehicles by color\n" +
-//                "5 - Find vehicles by mileage range\n" +
-//                "6 - Find vehicles by type (car, truck, SUV, van)\n" +
-//                "7 - List ALL vehicles\n" +
-//                "8 - Add a vehicle\n" +
-//                "9 - Remove a vehicle\n" +
-//                "99 - Quit\n" +
-//                "Enter your choice: ");
-//    }
-
-    //DISPLAY FORMATTING
-    private void displayVehicles(List<Vehicle> vehicles) {
-        if (vehicles == null || vehicles.isEmpty()) {
-            System.out.println("No vehicles found.");
-            return;
+        private boolean authenticateEmployee() {
+            System.out.print("Enter employee PIN: ");
+            return scanner.nextLine().equals("6969");
         }
 
-        System.out.printf("%-10s | %-4s | %-10s | %-10s | %-7s | %-10s | %-10s | %-10s\n",
-                "VIN", "Year", "Make", "Model", "Type", "Color", "Mileage", "Price");
-        System.out.println("---------------------------------------------------------------------------------------------");
+        private void showAllVehicles() {
+            displayVehicles(dealership.getAllVehicles());
+        }
 
-        for (Vehicle v : vehicles) {
-            System.out.printf("%-10d | %-4d | %-10s | %-15s | %-7s | %-10s | %,10d | $%,9.2f\n",
-                    v.getVin(), v.getYear(), v.getMake(), v.getModel(), v.getVehicleType(),
-                    v.getColor(), v.getOdometer(), v.getPrice());
+        private void searchByPrice() {
+            double min = promptDouble("Min price");
+            double max = promptDouble("Max price");
+            displayVehicles(dealership.getVehiclesByPrice(min, max));
+        }
+
+        private void searchByMakeModel() {
+            String make = prompt("Make");
+            String model = prompt("Model");
+            displayVehicles(dealership.getVehiclesByMakeModel(make, model));
+        }
+
+        private void searchByYear() {
+            int min = promptInt("Min year");
+            int max = promptInt("Max year");
+            displayVehicles(dealership.getVehiclesByYear(min, max));
+        }
+
+        private void searchByColor() {
+            String color = prompt("Color");
+            displayVehicles(dealership.getVehiclesByColor(color));
+        }
+
+        private void searchByMileage() {
+            int min = promptInt("Min mileage");
+            int max = promptInt("Max mileage");
+            displayVehicles(dealership.getVehiclesByMileage(min, max));
+        }
+
+        private void searchByType() {
+            String type = prompt("Vehicle type");
+            displayVehicles(dealership.getVehiclesByType(type));
+        }
+
+        private void addVehicle() {
+            int vin = promptInt("VIN");
+            int year = promptInt("Year");
+            String make = prompt("Make");
+            String model = prompt("Model");
+            String type = prompt("Type");
+            String color = prompt("Color");
+            int odometer = promptInt("Odometer");
+            double price = promptDouble("Price");
+            dealership.addVehicle(new Vehicle(vin, year, make, model, type, color, odometer, price));
+            System.out.println("Vehicle added.");
+        }
+
+        private void removeVehicle() {
+            int vin = promptInt("Enter VIN to remove");
+            dealership.removeVehicle(vin);
+            System.out.println("Vehicle removed (if it existed).");
+        }
+
+        private void sellOrLeaseVehicle() {
+            int vin = promptInt("Enter VIN");
+            Vehicle v = dealership.getVehicleByVin(vin);
+            if (v == null) {
+                System.out.println("Vehicle not found.");
+                return;
+            }
+
+            String name = prompt("Customer name");
+            String email = prompt("Customer email");
+            String date = prompt("Contract date (YYYYMMDD)");
+            String type = prompt("Sale or Lease").toUpperCase();
+
+            Contract contract = null;
+            if (type.equals("SALE")) {
+                boolean financed = prompt("Financed? (yes/no)").equalsIgnoreCase("yes");
+                contract = new SalesContract(date, name, email, v, financed);
+            } else if (type.equals("LEASE")) {
+                if (v.getYear() < java.time.LocalDate.now().getYear() - 3) {
+                    System.out.println("Can't lease vehicles older than 3 years.");
+                    return;
+                }
+                contract = new LeaseContract(date, name, email, v);
+            }
+
+            if (contract != null) {
+                new ContractFileManager().saveContract(contract);
+                dealership.removeVehicle(vin);
+                System.out.println("Contract saved and vehicle removed.");
+            }
+        }
+
+        private void showAllContracts() {
+            List<Contract> contracts = new ContractFileManager().loadContracts();
+            for (Contract c : contracts) {
+                Vehicle v = c.getVehicle();
+                System.out.printf("%s | %s | %s | %s %s | VIN: %d | Total: $%.2f | Monthly: $%.2f\n",
+                        c instanceof SalesContract ? "SALE" : "LEASE",
+                        c.getDate(), c.getCustomerName(),
+                        v.getMake(), v.getModel(), v.getVin(),
+                        c.getTotalPrice(), c.getMonthlyPayment());
+            }
+        }
+
+        private void displayVehicles(List<Vehicle> vehicles) {
+            if (vehicles.isEmpty()) {
+                System.out.println("No vehicles found.");
+                return;
+            }
+
+            for (Vehicle v : vehicles) {
+                System.out.printf("%d | %d %s %s | %s | %s | %,d mi | $%,.2f\n",
+                        v.getVin(), v.getYear(), v.getMake(), v.getModel(),
+                        v.getType(), v.getColor(), v.getOdometer(), v.getPrice());
+            }
+        }
+
+        private String prompt(String msg) {
+            System.out.print(msg + ": ");
+            return scanner.nextLine();
+        }
+
+        private int promptInt(String msg) {
+            return Integer.parseInt(prompt(msg));
+        }
+
+        private double promptDouble(String msg) {
+            return Double.parseDouble(prompt(msg));
         }
     }
-
-    private void addVehicle(){
-        int vin = promptInt("VIN");
-        int year = promptInt("Year");
-        String make = prompt("Make");
-        String model = prompt("Model");
-        String type = prompt("Type");
-        String color = prompt("Color");
-        int odometer = promptInt("Odometer");
-        double price = promptDouble("Price");
-        dealership.addVehicle(new Vehicle(vin, year, make, model, type, color, odometer, price));
-        System.out.println("Vehicle added.");
-    }
-    private void removeVehicle(){
-        int vin = promptInt("Enter VIN # to remove: ");
-        dealership.removeVehicle(vin);
-        System.out.printf("Vehicle #%d removed.", vin);
-    }
-
-    private boolean authenticateEmployee() {
-        System.out.print("Enter employee PIN: ");
-        String input = scanner.nextLine();
-        if (input.equals("6969")) {
-            return true;
-        } else {
-            System.out.println("Access denied. Invalid PIN.");
-            return false;
-        }
-    }
-
-    //COLLECTS USER INPUT
-    private String prompt(String msg) {
-        System.out.print(msg + ": ");
-        return scanner.nextLine();
-    }
-
-    private int promptInt(String msg) {
-        System.out.print(msg + ": ");
-        return Integer.parseInt(scanner.nextLine());
-    }
-
-    private double promptDouble(String msg) {
-        System.out.print(msg + ": ");
-        return Double.parseDouble(scanner.nextLine());
-    }
-}
