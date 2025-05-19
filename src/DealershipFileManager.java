@@ -1,6 +1,4 @@
-
 import java.io.*;
-import java.util.*;
 
 public class DealershipFileManager {
     private static final String FILE_NAME = "inventory.csv";
